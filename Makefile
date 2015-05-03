@@ -21,27 +21,28 @@
 TARGET     = demo
 
 # Take a look into $(CUBE_DIR)/Drivers/BSP for available BSPs
-BOARD      = STM32F401RE-Nucleo
+BOARD      = STM32L152RE-Nucleo
+# STM32F401RE-Nucleo
 
-OCDFLAGS   = -f board/st_nucleo_f401re.cfg
+OCDFLAGS   = -f board/stm32ldiscovery.cfg
 GDBFLAGS   = 
 
 #EXAMPLE   = Templates
 EXAMPLE    = Examples/GPIO/GPIO_IOToggle
 
 # MCU family and type in various capitalizations o_O
-MCU_FAMILY = stm32f4xx
-MCU_LC     = stm32f401xe
-MCU_MC     = STM32F401xE
-MCU_UC     = STM32F401XE
+MCU_FAMILY = stm32l1xx
+MCU_LC     = stm32l152xe
+MCU_MC     = STM32L152xE
+MCU_UC     = STM32L152XE
 
 # Your C files from the /src directory
 SRCS       = main.c
 SRCS      += system_$(MCU_FAMILY).c
-SRCS      += stm32f4xx_it.c
+SRCS      += stm32l1xx_it.c
 
 # Basic HAL libraries
-SRCS      += stm32f4xx_hal_rcc.c stm32f4xx_hal_rcc_ex.c stm32f4xx_hal.c stm32f4xx_hal_cortex.c stm32f4xx_hal_gpio.c
+SRCS      += stm32l1xx_hal_rcc.c stm32l1xx_hal_rcc_ex.c stm32l1xx_hal.c stm32l1xx_hal_cortex.c stm32l1xx_hal_gpio.c
 
 # Directories
 OCD_DIR    = /usr/share/openocd/scripts
@@ -49,12 +50,12 @@ OCD_DIR    = /usr/share/openocd/scripts
 CUBE_DIR   = cube
 
 BSP_DIR    = $(CUBE_DIR)/Drivers/BSP/$(BOARD)
-HAL_DIR    = $(CUBE_DIR)/Drivers/STM32F4xx_HAL_Driver
+HAL_DIR    = $(CUBE_DIR)/Drivers/STM32L1xx_HAL_Driver
 CMSIS_DIR  = $(CUBE_DIR)/Drivers/CMSIS
 
-DEV_DIR    = $(CMSIS_DIR)/Device/ST/STM32F4xx
+DEV_DIR    = $(CMSIS_DIR)/Device/ST/STM32L1xx
 
-CUBE_URL   = http://www.st.com/st-web-ui/static/active/en/st_prod_software_internet/resource/technical/software/firmware/stm32cubef4.zip
+CUBE_URL   = http://www.st.com/st-web-ui/static/active/en/st_prod_software_internet/resource/technical/software/firmware/stm32cubel1.zip
 
 # that's it, no need to change anything below this line!
 
