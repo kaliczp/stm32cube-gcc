@@ -21,28 +21,28 @@
 TARGET     = demo
 
 # Take a look into $(CUBE_DIR)/Drivers/BSP for available BSPs
-BOARD      = STM32L152RE-Nucleo
-# STM32F401RE-Nucleo
+BOARD      = STM32F072B-Discovery
 
-OCDFLAGS   = -f board/stm32ldiscovery.cfg
+OCDFLAGS   = -f board/stm32f0discovery.cfg
 GDBFLAGS   = 
 
 #EXAMPLE   = Templates
 EXAMPLE    = Examples/GPIO/GPIO_IOToggle
 
 # MCU family and type in various capitalizations o_O
-MCU_FAMILY = stm32l1xx
-MCU_LC     = stm32l152xe
-MCU_MC     = STM32L152xE
-MCU_UC     = STM32L152XE
+MCU_FAMILY = stm32f0xx
+MCU_LC     = stm32f072xb
+MCU_MC     = STM32F072xB
+MCU_UC     = STM32F072XB
+MCU_UCE	   = STM32F072RB
 
 # Your C files from the /src directory
 SRCS       = main.c
 SRCS      += system_$(MCU_FAMILY).c
-SRCS      += stm32l1xx_it.c
+SRCS      += stm32f0xx_it.c
 
 # Basic HAL libraries
-SRCS      += stm32l1xx_hal_rcc.c stm32l1xx_hal_rcc_ex.c stm32l1xx_hal.c stm32l1xx_hal_cortex.c stm32l1xx_hal_gpio.c
+SRCS      += stm32f0xx_hal_rcc.c stm32f0xx_hal_rcc_ex.c stm32f0xx_hal.c stm32f0xx_hal_cortex.c stm32f0xx_hal_gpio.c
 
 # Directories
 OCD_DIR    = /usr/share/openocd/scripts
@@ -50,12 +50,12 @@ OCD_DIR    = /usr/share/openocd/scripts
 CUBE_DIR   = cube
 
 BSP_DIR    = $(CUBE_DIR)/Drivers/BSP/$(BOARD)
-HAL_DIR    = $(CUBE_DIR)/Drivers/STM32L1xx_HAL_Driver
+HAL_DIR    = $(CUBE_DIR)/Drivers/STM32F0xx_HAL_Driver
 CMSIS_DIR  = $(CUBE_DIR)/Drivers/CMSIS
 
-DEV_DIR    = $(CMSIS_DIR)/Device/ST/STM32L1xx
+DEV_DIR    = $(CMSIS_DIR)/Device/ST/STM32F0xx
 
-CUBE_URL   = http://www.st.com/st-web-ui/static/active/en/st_prod_software_internet/resource/technical/software/firmware/stm32cubel1.zip
+CUBE_URL   = http://www.st.com/st-web-ui/static/active/en/st_prod_software_internet/resource/technical/software/firmware/stm32cubef0.zip
 
 # that's it, no need to change anything below this line!
 
@@ -93,8 +93,7 @@ LIBS       = -L$(CMSIS_DIR)/Lib
 
 # Compiler flags
 CFLAGS     = -Wall -g -std=c99 -Os
-CFLAGS    += -mlittle-endian -mcpu=cortex-m4 -march=armv7e-m -mthumb
-CFLAGS    += -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+CFLAGS    += -mlittle-endian -mcpu=cortex-m0 -march=armv6-m -mthumb
 CFLAGS    += -ffunction-sections -fdata-sections
 CFLAGS    += $(INCS) $(DEFS)
 
@@ -175,7 +174,7 @@ template: cube src
 	cp -ri $(CUBE_DIR)/Projects/$(BOARD)/$(EXAMPLE)/Src/* src
 	cp -ri $(CUBE_DIR)/Projects/$(BOARD)/$(EXAMPLE)/Inc/* src
 	cp -i $(DEV_DIR)/Source/Templates/gcc/startup_$(MCU_LC).s src
-	cp -i $(DEV_DIR)/Source/Templates/gcc/linker/$(MCU_UC)_FLASH.ld scripts/$(MCU_LC).ld
+	cp -i $(CUBE_DIR)/Projects/$(BOARD)/Templates/TrueSTUDIO/$(BOARD)/$(MCU_UCE)_FLASH.ld $(MCU_LC).ld
 
 clean:
 	@echo "[RM]      $(TARGET).elf"; rm -f $(TARGET).elf
