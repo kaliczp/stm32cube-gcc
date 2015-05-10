@@ -22,7 +22,8 @@
 TARGET     = demo
 
 # Take a look into $(CUBE_DIR)/Drivers/BSP for available BSPs
-BOARD      = STM32L152RE-Nucleo
+BOARD      = STM32L1xx_Nucleo
+EXBOARD      = STM32L152RE-Nucleo
 # STM32F401RE-Nucleo
 
 OCDFLAGS   = -f board/stm32ldiscovery.cfg
@@ -36,6 +37,7 @@ MCU_FAMILY = stm32l1xx
 MCU_LC     = stm32l152xe
 MCU_MC     = STM32L152xE
 MCU_UC     = STM32L152XE
+MCU_UCE    = STM32L152RB
 
 # Your C files from the /src directory
 SRCS       = main.c
@@ -122,7 +124,7 @@ endif
 
 ###################################################
 
-.PHONY: all dirs program debug template clean
+.PHONY: all dirs program debug template clean cube
 
 all: $(TARGET).elf
 
@@ -165,17 +167,14 @@ debug:
 
 cube:
 	rm -fr $(CUBE_DIR)
-	wget -O /tmp/cube.zip $(CUBE_URL)
-	unzip /tmp/cube.zip
-	mv STM32Cube* $(CUBE_DIR)
-	chmod -R u+w $(CUBE_DIR)
-	rm -f /tmp/cube.zip
+	ln -s ~/STM32Cube/Repository/STM32Cube_FW_L1_V1.2.0 $(CUBE_DIR)
 
 template: cube src
-	cp -ri $(CUBE_DIR)/Projects/$(BOARD)/$(EXAMPLE)/Src/* src
-	cp -ri $(CUBE_DIR)/Projects/$(BOARD)/$(EXAMPLE)/Inc/* src
+	cp -ri $(CUBE_DIR)/Projects/$(EXBOARD)/$(EXAMPLE)/Src/* src
+	cp -ri $(CUBE_DIR)/Projects/$(EXBOARD)/$(EXAMPLE)/Inc/* src
 	cp -i $(DEV_DIR)/Source/Templates/gcc/startup_$(MCU_LC).s src
-	cp -i $(DEV_DIR)/Source/Templates/gcc/linker/$(MCU_UC)_FLASH.ld $(MCU_LC).ld
+	cp -i $(CUBE_DIR)/Projects/STM32L152RE-Nucleo/Templates/TrueSTUDIO/STM32L152RE_NUCLEO/STM32L152RE_FLASH.ld $(MCU_LC).ld
+# cp -i $(CUBE_DIR)/Projects/$(BOARD)/Templates/TrueSTUDIO/$(BOARD)/$(MCU_UCE)_FLASH.ld $(MCU_LC).ld
 
 clean:
 	@echo "[RM]      $(TARGET).elf"; rm -f $(TARGET).elf
