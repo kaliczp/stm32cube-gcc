@@ -27,7 +27,10 @@ OCDFLAGS   = -f board/stm32f0discovery.cfg
 GDBFLAGS   = 
 
 #EXAMPLE   = Templates
-EXAMPLE    = Examples/GPIO/GPIO_IOToggle
+#EXAMPLE    = Examples/GPIO/GPIO_IOToggle
+EXAMPLE    = Examples/GPIO/GPIO_EXTI
+#EXAMPLE    = Examples/TIM/TIM_TimeBase
+
 
 # MCU family and type in various capitalizations o_O
 MCU_FAMILY = stm32f0xx
@@ -39,10 +42,13 @@ MCU_UCE	   = STM32F072RB
 # Your C files from the /src directory
 SRCS       = main.c
 SRCS      += system_$(MCU_FAMILY).c
-SRCS      += stm32f0xx_it.c
+SRCS      += $(MCU_FAMILY)_it.c
 
 # Basic HAL libraries
-SRCS      += stm32f0xx_hal_rcc.c stm32f0xx_hal_rcc_ex.c stm32f0xx_hal.c stm32f0xx_hal_cortex.c stm32f0xx_hal_gpio.c
+SRCS += $(MCU_FAMILY)_hal_rcc.c $(MCU_FAMILY)_hal_rcc_ex.c	\
+$(MCU_FAMILY)_hal.c $(MCU_FAMILY)_hal_cortex.c			\
+$(MCU_FAMILY)_hal_gpio.c stm32f072b_discovery.c			\
+$(MCU_FAMILY)_hal_tim.c $(MCU_FAMILY)_hal_tim_ex.c
 
 # Directories
 OCD_DIR    = /usr/share/openocd/scripts
