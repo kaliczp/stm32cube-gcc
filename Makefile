@@ -164,11 +164,7 @@ debug:
 
 cube:
 	rm -fr $(CUBE_DIR)
-	wget -O /tmp/cube.zip $(CUBE_URL)
-	unzip /tmp/cube.zip
-	mv STM32Cube* $(CUBE_DIR)
-	chmod -R u+w $(CUBE_DIR)
-	rm -f /tmp/cube.zip
+	ln -s ~/STM32Cube/Repository/STM32Cube_FW_F0_V1.2.0 $(CUBE_DIR)
 
 template: cube src
 	cp -ri $(CUBE_DIR)/Projects/$(BOARD)/$(EXAMPLE)/Src/* src
