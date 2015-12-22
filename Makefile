@@ -16,14 +16,14 @@
 # Author	Steffen Vogel <post@steffenvogel.de>
 # Link		http://www.steffenvogel.de
 #
-# edited for the STM32F4-Discovery
+# edited for the STM32L053R8-Nucleo board.
 
 # A name common to all output files (elf, map, hex, bin, lst)
 TARGET     = demo
 
 # Take a look into $(CUBE_DIR)/Drivers/BSP for available BSPs
-BOARD      = STM32L1xx_Nucleo
-EXBOARD      = STM32L152RE-Nucleo
+BOARD      = STM32L053R8_NUCLEO
+EXBOARD      = STM32L053R8-Nucleo
 # STM32F401RE-Nucleo
 
 OCDFLAGS   = -f board/stm32ldiscovery.cfg
@@ -33,19 +33,18 @@ GDBFLAGS   =
 EXAMPLE    = Examples/GPIO/GPIO_IOToggle
 
 # MCU family and type in various capitalizations o_O
-MCU_FAMILY = stm32l1xx
-MCU_LC     = stm32l152xe
-MCU_MC     = STM32L152xE
-MCU_UC     = STM32L152XE
-MCU_UCE    = STM32L152RB
+MCU_FAMILY = stm32l0xx
+MCU_LC     = stm32l053xx
+MCU_MC     = STM32L053xx
+MCU_UC     = STM32L053R8Hx
 
 # Your C files from the /src directory
 SRCS       = main.c
 SRCS      += system_$(MCU_FAMILY).c
-SRCS      += stm32l1xx_it.c
+SRCS      += stm32l0xx_it.c
 
 # Basic HAL libraries
-SRCS      += stm32l1xx_hal_rcc.c stm32l1xx_hal_rcc_ex.c stm32l1xx_hal.c stm32l1xx_hal_cortex.c stm32l1xx_hal_gpio.c stm32l1xx_hal_pwr_ex.c
+SRCS      += stm32l0xx_hal_rcc.c stm32l0xx_hal_rcc_ex.c stm32l0xx_hal.c stm32l0xx_hal_cortex.c stm32l0xx_hal_gpio.c stm32l0xx_hal_pwr_ex.c
 
 # Directories
 OCD_DIR    = /usr/share/openocd/scripts
@@ -53,10 +52,10 @@ OCD_DIR    = /usr/share/openocd/scripts
 CUBE_DIR   = cube
 
 BSP_DIR    = $(CUBE_DIR)/Drivers/BSP/$(BOARD)
-HAL_DIR    = $(CUBE_DIR)/Drivers/STM32L1xx_HAL_Driver
+HAL_DIR    = $(CUBE_DIR)/Drivers/STM32L0xx_HAL_Driver
 CMSIS_DIR  = $(CUBE_DIR)/Drivers/CMSIS
 
-DEV_DIR    = $(CMSIS_DIR)/Device/ST/STM32L1xx
+DEV_DIR    = $(CMSIS_DIR)/Device/ST/STM32L0xx
 
 CUBE_URL   = http://www.st.com/st-web-ui/static/active/en/st_prod_software_internet/resource/technical/software/firmware/stm32cubel1.zip
 
@@ -96,7 +95,7 @@ LIBS       = -L$(CMSIS_DIR)/Lib
 
 # Compiler flags
 CFLAGS     = -Wall -g -std=c99 -Os
-CFLAGS    += -mlittle-endian -mcpu=cortex-m3 -march=armv7-m -mthumb
+CFLAGS    += -mlittle-endian -mcpu=cortex-m0plus -march=armv6-m -mthumb
 CFLAGS    += -ffunction-sections -fdata-sections
 CFLAGS    += $(INCS) $(DEFS)
 
@@ -167,14 +166,14 @@ debug:
 
 cube:
 	rm -fr $(CUBE_DIR)
-	ln -s ~/STM32Cube/Repository/STM32Cube_FW_L1_V1.4.0 $(CUBE_DIR)
+	ln -s ~/STM32Cube/Repository/STM32Cube_FW_L0_V1.4.0 $(CUBE_DIR)
 
 template: cube src
 	cp -ri $(CUBE_DIR)/Projects/$(EXBOARD)/$(EXAMPLE)/Src/* src
 	cp -ri $(CUBE_DIR)/Projects/$(EXBOARD)/$(EXAMPLE)/Inc/* src
+	cp -i  $(CUBE_DIR)/Projects/$(EXBOARD)/$(EXAMPLE)/SW4STM32/$(BOARD)/$(MCU_UC)_FLASH.ld $(MCU_LC).ld
+	cp -i  $(CUBE_DIR)/Projects/$(EXBOARD)/$(EXAMPLE)/SW4STM32/startup_$(MCU_LC).s src
 	cp -i $(DEV_DIR)/Source/Templates/gcc/startup_$(MCU_LC).s src
-	cp -i $(CUBE_DIR)/Projects/STM32L152RE-Nucleo/Templates/TrueSTUDIO/STM32L152RE_NUCLEO/STM32L152RE_FLASH.ld $(MCU_LC).ld
-# cp -i $(CUBE_DIR)/Projects/$(BOARD)/Templates/TrueSTUDIO/$(BOARD)/$(MCU_UCE)_FLASH.ld $(MCU_LC).ld
 
 clean:
 	@echo "[RM]      $(TARGET).elf"; rm -f $(TARGET).elf
