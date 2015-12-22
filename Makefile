@@ -167,7 +167,7 @@ debug:
 
 cube:
 	rm -fr $(CUBE_DIR)
-	ln -s ~/STM32Cube/Repository/STM32Cube_FW_L1_V1.2.0 $(CUBE_DIR)
+	ln -s ~/STM32Cube/Repository/STM32Cube_FW_L1_V1.4.0 $(CUBE_DIR)
 
 template: cube src
 	cp -ri $(CUBE_DIR)/Projects/$(EXBOARD)/$(EXAMPLE)/Src/* src
